@@ -1,0 +1,23 @@
+div.drawer__paper {
+    overflow-x: hidden;
+    transition: width 0.2s ease-out;  /* overwrite transition value from Paper component */
+}
+
+.open {
+    width: 240px;
+}
+
+.closed {
+    width: 56px;
+}
+
+.toggle-button {
+    height: 50px;
+    border-radius: 0;
+}
+
+.toggle-button > span {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

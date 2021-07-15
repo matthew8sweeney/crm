@@ -1,0 +1,13 @@
+.root {
+    width: 300px;
+    margin: 10vh auto;
+}
+
+p.main-text {
+    font-size: 24px;
+    margin: 16px;
+}
+
+div.link__grid-item {
+    margin: 8px;
+}

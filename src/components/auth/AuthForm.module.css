@@ -1,0 +1,9 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.child,
+button.child {
+  margin: 16px 16px 0 16px;
+}
