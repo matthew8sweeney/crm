@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Divider, Drawer, IconButton, List } from "@material-ui/core";
-import { ChevronRight, ChevronLeft } from "@material-ui/icons";
+import { ChevronRight } from "@material-ui/icons";
 import WebIcon from "@material-ui/icons/Web";
-import TimelineIcon from "@material-ui/icons/Timeline";
-import SettingsIcon from "@material-ui/icons/Settings";
-import WidgetsIcon from "@material-ui/icons/Widgets";
 import BorderIcon from "@material-ui/icons/BorderAll";
+import TimelineIcon from "@material-ui/icons/Timeline";
+import WidgetsIcon from "@material-ui/icons/Widgets";
+import AccountIcon from "@material-ui/icons/AccountCircle";
+import SettingsIcon from "@material-ui/icons/Settings";
 
-import classes from "./MainNavigation.module.css";
 import MainNavLI from "./MainNavLI";
+import classes from "./MainNavigation.module.css";
 
 const MainNavigation = (props) => {
   const [open, setOpen] = useState(false);
@@ -26,15 +27,20 @@ const MainNavigation = (props) => {
     >
       <IconButton
         onClick={toggleHandler}
-        className={classes["toggle-button"]}
+        title={`${open ? "Close" : "Open"} main navigation drawer`}
+        className={`${classes["toggle-button"]} ${
+          open ? classes["toggle-button--flipped"] : ""
+        }`}
         style={{ borderRadius: 0 }}
       >
-        {open ? <ChevronLeft /> : <ChevronRight />}
+        <ChevronRight />
       </IconButton>
       <Divider />
-      <List>
+      <List style={{ paddingTop: 0 }}>
         <MainNavLI to="/dashboard" primary="Dashboard" icon={BorderIcon} />
         <MainNavLI to="/timeline" primary="Timeline" icon={TimelineIcon} />
+        <Divider component="li" />
+        <MainNavLI to="/account" primary="Account" icon={AccountIcon} />
         <MainNavLI to="/settings" primary="Settings" icon={SettingsIcon} />
       </List>
     </Drawer>

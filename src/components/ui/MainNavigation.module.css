@@ -1,6 +1,6 @@
 div.drawer__paper {
     overflow-x: hidden;
-    transition: width 0.2s ease-out;  /* overwrite transition value from Paper component */
+    transition: width 0.2s ease-out; /* overwrite transition value from Paper component */
 }
 
 .open {
@@ -13,11 +13,21 @@ div.drawer__paper {
 
 .toggle-button {
     height: 50px;
-    border-radius: 0;
+    /* border-radius overwritten by Mui classes */
+    /* border-radius: 0;  */
 }
 
 .toggle-button > span {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+/* the chevron icon */
+.toggle-button > span > svg {
+    transition: transform 0.2s ease-out;
+}
+
+.toggle-button--flipped > span > svg {
+    transform: rotate(180deg);
 }

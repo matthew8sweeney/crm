@@ -1,0 +1,13 @@
+.select {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.customer-select {
+    /* width: 400px; */
+}
+
+.widget-select {
+    flex-grow: 0;
+}

@@ -2,17 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "@material-ui/core";
 import reportWebVitals from "./reportWebVitals";
 
-import store from "./store/index"
+import store from "./store/index";
 import App from "./App";
+import theme from "./theme"
 import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>,
