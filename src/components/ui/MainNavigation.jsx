@@ -11,6 +11,12 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import MainNavLI from "./MainNavLI";
 import classes from "./MainNavigation.module.css";
 
+const NavList = (props) => (
+  <nav>
+    <ul {...props} />
+  </nav>
+);
+
 const MainNavigation = (props) => {
   const [open, setOpen] = useState(false);
   const toggleClass = open ? classes.open : classes.closed;
@@ -36,12 +42,11 @@ const MainNavigation = (props) => {
         <ChevronRight />
       </IconButton>
       <Divider />
-      <List style={{ paddingTop: 0 }}>
+      <List component={NavList}>
         <MainNavLI to="/dashboard" primary="Dashboard" icon={BorderIcon} />
         <MainNavLI to="/timeline" primary="Timeline" icon={TimelineIcon} />
         <Divider component="li" />
         <MainNavLI to="/account" primary="Account" icon={AccountIcon} />
-        <MainNavLI to="/settings" primary="Settings" icon={SettingsIcon} />
       </List>
     </Drawer>
   );

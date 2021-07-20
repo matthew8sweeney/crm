@@ -31,3 +31,9 @@ div.drawer__paper {
 .toggle-button--flipped > span > svg {
     transform: rotate(180deg);
 }
+
+.list{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

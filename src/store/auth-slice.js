@@ -50,7 +50,7 @@ const checkInitialAuth = () => {
       localStorage.getItem("isLoggedIn") === "1" &&
       typeof email === "string" &&
       typeof token === "string"
-      // TODO check stored expiration time of token
+      // new Date(tokenExpires) > new Date()  // or something
     ) {
       dispatch(authSlice.actions.login({ email: email, token: token }));
     } else {

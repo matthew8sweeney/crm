@@ -1,0 +1,9 @@
+
+/* the "expand" chevron icon */
+.toggle-button > span > svg {
+    transition: transform 0.2s ease-out;
+}
+
+.toggle-button--flipped > span > svg {
+    transform: rotate(180deg);
+}

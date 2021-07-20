@@ -2,9 +2,5 @@
     text-align: center;
 }
 
-.app-container,
-div.app-container {
-    margin: 0 ;  /* overwritten by style attribute if drawer present */
-    padding: 0;
-    overflow: show;
+.app-container {
 }
