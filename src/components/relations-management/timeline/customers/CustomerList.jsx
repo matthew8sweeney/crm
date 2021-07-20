@@ -16,6 +16,7 @@ const CustomerList = (props) => {
           customerKey={customerKey}
           type={props.type}  // customer type (lead/account)
           selected={customerKey === pathSegments[3]}
+          key={customerKey}
         />
       ))}
     </List>

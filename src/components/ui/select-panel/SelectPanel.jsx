@@ -14,7 +14,7 @@ import FilterIcon from "@material-ui/icons/FilterList";
 const SelectPanel = (props) => {
   const scrollRef = useRef();
 
-  const [tab, setTab] = useState(undefined); // really initialized in useEffect
+  const [tab, setTab] = useState(0); // really initialized in useEffect
 
   const handleChange = (event, index) => {
     setTab(index);
@@ -28,9 +28,8 @@ const SelectPanel = (props) => {
   // re-create scrollTrigger once scroll target is in the DOM
   useEffect(() => {
     setTab(props.activeTab || 0);
-  }, []);
+  }, [props.activeTab]);
 
-  // elevation={scrollTrigger ? 4 : 0} as prop to AppBar for scroll elevation
   return (
     <div
       className={props.className}
@@ -38,8 +37,8 @@ const SelectPanel = (props) => {
     >
       <AppBar elevation={scrollTrigger ? 4 : 0}>
         <Tabs value={tab} onChange={handleChange}>
-          {props.tabs.map((label) => (
-            <Tab label={label} />
+          {props.tabs.map((label, i) => (
+            <Tab label={label} key={i} />
           ))}
         </Tabs>
         <IconButton title="filter" style={{ borderRadius: 0 }}>
@@ -47,12 +46,7 @@ const SelectPanel = (props) => {
         </IconButton>
       </AppBar>
 
-      <Paper
-        square
-        // {...props.PaperProps}
-        style={{ flexGrow: 1, overflowY: "auto" }}
-        ref={scrollRef}
-      >
+      <Paper square style={{ flexGrow: 1, overflowY: "auto" }} ref={scrollRef}>
         {props.bodies[tab]}
       </Paper>
     </div>

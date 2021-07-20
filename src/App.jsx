@@ -7,7 +7,7 @@ import { authActions } from "./store/auth-slice";
 import { dataActions } from "./store/data-slice";
 import dummyData from "./store/dummy-data";
 import LoginSignup from "./pages/LoginSignup";
-import MainNavigation from "./components/ui/MainNavigation";
+import MainNavigation from "./components/ui/main-navigation/MainNavigation";
 import PageNotFound from "./pages/PageNotFound";
 import Timeline from "./pages/Timeline";
 import "./App.css";

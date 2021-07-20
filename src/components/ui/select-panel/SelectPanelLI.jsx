@@ -23,11 +23,12 @@ const SelectPanelLI = (props) => {
     <>
       <ListItem
         button
-        component={NavLink}
+        onClick={props.onClick}
+        component={props.component || NavLink}
         ContainerComponent="div"
         to={props.to}
         selected={props.selected}
-        key={props.key}
+        divider
       >
         <ListItemText primary={props.primary} secondary={props.secondary} />
         {expandable && (
@@ -45,7 +46,11 @@ const SelectPanelLI = (props) => {
           </ListItemSecondaryAction>
         )}
       </ListItem>
-      <Collapse in={open} unmountOnExit timeout="auto">
+      <Collapse
+        in={open}
+        timeout="auto"
+        unmountOnExit
+      >
         {props.children}
       </Collapse>
     </>

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
-import SelectPanel from "../../ui/select-panel/SelectPanel";
+import SelectPanel from "../../../ui/select-panel/SelectPanel";
 import CustomerList from "./CustomerList";
 import classes from "./CustomerSelectPanel.module.css";
 

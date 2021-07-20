@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 
 import store from "./store/index";
 import App from "./App";
-import theme from "./theme"
+import theme from "./theme";
 import "./index.css";
 
 ReactDOM.render(
