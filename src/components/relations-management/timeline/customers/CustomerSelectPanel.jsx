@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import SelectPanel from "../../../ui/select-panel/SelectPanel";
 import CustomerList from "./CustomerList";
+import CustomerFilterMenu from "./CustomerFilterMenu";
 import classes from "./CustomerSelectPanel.module.css";
 
 const CustomerSelectPanel = (props) => {
@@ -19,6 +20,7 @@ const CustomerSelectPanel = (props) => {
         <CustomerList data={data.leads} type="lead" />,
         <CustomerList data={data.accounts} type="account" />,
       ]}
+      filterMenuComponent={CustomerFilterMenu}
       className={classes.body}
     />
   );

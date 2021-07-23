@@ -1,0 +1,11 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.form > div {
+    margin: 0 16px 16px 16px;
+    position: relative;
+}

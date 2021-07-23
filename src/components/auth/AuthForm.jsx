@@ -14,11 +14,11 @@ const isValidPassword = (str) => str.length >= 6;
  * Form with auto-validated email and password inputs, and submit button.
  */
 const AuthForm = (props) => {
+  const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
-  const emailError = useSelector((state) => state.ui.emailError);
-  const passwordError = useSelector((state) => state.ui.passwordError);
-  const dispatch = useDispatch();
+  const emailError = useSelector((state) => state.ui.auth.emailError);
+  const passwordError = useSelector((state) => state.ui.auth.passwordError);
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
@@ -28,7 +28,7 @@ const AuthForm = (props) => {
 
     if (isValidEmail(newEmail)) {
       // remove error message is new value is valid
-      dispatch(uiActions.clearEmailError());
+      dispatch(uiActions.hideEmailError());
     }
   };
 
@@ -38,7 +38,7 @@ const AuthForm = (props) => {
 
     if (isValidPassword(newPassword)) {
       // remove error message is new value is valid
-      dispatch(uiActions.clearPasswordError());
+      dispatch(uiActions.hidePasswordError());
     }
   };
 
@@ -46,18 +46,14 @@ const AuthForm = (props) => {
     event.preventDefault();
 
     let inputsAreValid = true;
-    if (isValidPassword(enteredPassword)) {
-      dispatch(uiActions.clearPasswordError());
-    } else {
+    if (!isValidPassword(enteredPassword)) {
       // password too short
       dispatch(uiActions.showPasswordError("Password must be at least 6 characters"));
       passwordRef.current.focus();
       inputsAreValid = false;
     }
 
-    if (isValidEmail(enteredEmail)) {
-      dispatch(uiActions.clearEmailError());
-    } else {
+    if (!isValidEmail(enteredEmail)) {
       // not even close to an email addr
       dispatch(uiActions.showEmailError("Enter a valid email address"));
       emailRef.current.focus();

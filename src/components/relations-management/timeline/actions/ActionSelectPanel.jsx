@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
 import SelectPanel from "../../../ui/select-panel/SelectPanel";
+import ActionFilterMenu from "./ActionFilterMenu";
 import ActionList from "./ActionList";
 import ActionLI from "./ActionLI";
 import InteractionLI from "./InteractionLI";
@@ -56,7 +57,7 @@ const ActionSelectPanel = (props) => {
         <ActionList component={TaskLI} data={taskData} />,
         <ActionList component={NoteLI} data={noteData} />,
       ]}
-      tabsAnchorEl={props.anchorEl}
+      filterMenuComponent={ActionFilterMenu}
       className={classes.body}
     />
   );

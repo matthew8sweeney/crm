@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  emailError: "",
-  passwordError: "",
+  auth: {
+    emailError: "",
+    passwordError: "",
+  },
+  newItemDialog: {
+    isOpen: false,
+    itemTypeIndex: -1,
+  },
 };
 
 const uiSlice = createSlice({
@@ -10,16 +16,24 @@ const uiSlice = createSlice({
   initialState,
   reducers: {
     showEmailError(state, action) {
-      state.emailError = action.payload;
+      state.auth.emailError = action.payload;
     },
-    clearEmailError(state) {
-      state.emailError = "";
+    hideEmailError(state) {
+      state.auth.emailError = "";
     },
     showPasswordError(state, action) {
-      state.passwordError = action.payload;
+      state.auth.passwordError = action.payload;
     },
-    clearPasswordError(state) {
-      state.passwordError = "";
+    hidePasswordError(state) {
+      state.auth.passwordError = "";
+    },
+
+    showNewItemDialog(state, action) {
+      state.newItemDialog.itemTypeIndex = action.payload;
+      state.newItemDialog.isOpen = true;
+    },
+    hideNewItemDialog(state) {
+      state.newItemDialog.isOpen = false;
     },
   },
 });

@@ -17,7 +17,7 @@ const ValidTextField = (props) => {
       outWidth={props.outWidth}
       transition={props.transition}
       className={props.className}
-      style={props.style}
+      style={{ display: "flex", ...props.style }}
     >
       <TextField
         type={props.type}
@@ -28,8 +28,9 @@ const ValidTextField = (props) => {
         onChange={props.onChange}
         inputRef={props.inputRef}
         inputProps={props.inputProps}
-        variant={props.variant || "filled"}
         fullWidth={props.fullWidth}
+        {...props}
+        style={{ flexGrow: 1 }}
       />
     </CollapsingDiv>
   );

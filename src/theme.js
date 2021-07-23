@@ -42,10 +42,16 @@ const theme = createTheme({
     //     },
     //   },
     // },
+    MuiFormControl: {
+      root: {
+        flexGrow: 1,
+      },
+    },
   },
   props: {
     MuiContainer: {
       maxWidth: false,
+      disableGutters: true,
     },
     MuiAppBar: {
       position: "static",
@@ -60,6 +66,12 @@ const theme = createTheme({
     },
     MuiList: {
       disablePadding: true,
+    },
+    MuiFab: {
+      color: "primary",
+    },
+    MuiTextField: {
+      variant: "filled",
     },
   },
 });

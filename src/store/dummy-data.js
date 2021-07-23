@@ -2,8 +2,7 @@ const dummyData = {
   leads: {
     l1: {
       name: "Lead No. 1",
-      // latestAction: "Email - 1:40 PM",
-      latestAction: " ",
+      latestAction: "Email - 1:40 PM",
       website: "www.lead1.com",
       address: "123 Some Lane",
       industry: "Some industry",
