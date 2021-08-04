@@ -11,9 +11,30 @@ import TaskLI from "./TaskLI";
 import NoteLI from "./NoteLI";
 import classes from "./ActionSelectPanel.module.css";
 
+const filterActionData = (actionData, searchStr) => {
+  const filteredKeys = Object.keys(actionData).filter((actionKey) => {
+    let result = false;
+    const criterionTerms = searchStr.split(" ");
+    const criterion = new RegExp(`(${criterionTerms.join(").*(")})`, "i");
+    for (const property in actionData[actionKey]) {
+      const dataVal = actionData[actionKey][property];
+      if (typeof dataVal.match !== "undefined")
+        result = result || dataVal.match(criterion);
+    }
+    return result;
+  });
+  return Object.fromEntries(filteredKeys.map((key) => [key, actionData[key]]));
+};
+
 const ActionSelectPanel = (props) => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
+
+  const params = new URLSearchParams(location.search.toString());
+  const searchStr = params.has("actionSearch")
+    ? params.get("actionSearch")
+    : "";
+  const filterIsActive = !!searchStr;
 
   const customersData = useSelector((state) => state.data);
   let data;
@@ -26,10 +47,11 @@ const ActionSelectPanel = (props) => {
   let noteData = [];
   let allData = [];
   if (typeof data !== "undefined") {
-    interactionData = data.interactions;
-    taskData = data.tasks;
-    noteData = data.notes;
-    allData = [...data.interactions, ...data.tasks, ...data.notes];
+    interactionData = filterActionData(data.interactions, searchStr);
+    taskData = filterActionData(data.tasks, searchStr);
+    noteData = filterActionData(data.notes, searchStr);
+    // TODO fit different action types into same object
+    // allData = [...data.interactions, ...data.tasks, ...data.notes];
   }
 
   let tab;
@@ -58,6 +80,7 @@ const ActionSelectPanel = (props) => {
         <ActionList component={NoteLI} data={noteData} />,
       ]}
       filterMenuComponent={ActionFilterMenu}
+      hideFilterBadge={!filterIsActive}
       className={classes.body}
     />
   );

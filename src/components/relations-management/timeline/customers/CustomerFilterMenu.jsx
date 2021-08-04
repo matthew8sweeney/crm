@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Button, ListItem, Menu, TextField } from "@material-ui/core";
+import {
+  Button,
+  List,
+  ListItem,
+  Popover,
+  TextField,
+} from "@material-ui/core";
 
 import IndustrySelect from "../../IndustrySelect";
 
@@ -32,7 +38,7 @@ const CustomerFilterMenu = (props) => {
       history.replace({ search: params.toString() });
     }, 500);
     return () => clearTimeout(timer);
-  }, [industry, website, address, search]);
+  }, [name, industry, website, address]);
 
   const nameChangeHandler = (event) => setName(event.target.value);
   const industryChangeHandler = (event) => setIndustry(event.target.value);
@@ -47,44 +53,46 @@ const CustomerFilterMenu = (props) => {
   };
 
   return (
-    <Menu {...props}>
-      <ListItem style={{ paddingTop: 16 }}>
-        <TextField
-          value={name}
-          label="Name"
-          onChange={nameChangeHandler}
-          variant="outlined"
-        />
-      </ListItem>
-      <ListItem>
-        <IndustrySelect
-          value={industry}
-          onChange={industryChangeHandler}
-          variant="outlined"
-        />
-      </ListItem>
-      <ListItem>
-        <TextField
-          value={website}
-          label="Website"
-          onChange={websiteChangeHandler}
-          variant="outlined"
-        />
-      </ListItem>
-      <ListItem>
-        <TextField
-          value={address}
-          label="Address"
-          onChange={addressChangeHandler}
-          variant="outlined"
-        />
-      </ListItem>
-      <ListItem style={{ justifyContent: "center" }}>
-        <Button onClick={clearAllHandler} color="secondary">
-          Clear All
-        </Button>
-      </ListItem>
-    </Menu>
+    <Popover in={props.open} {...props}>
+      <List>
+        <ListItem style={{ paddingTop: 16 }}>
+          <TextField
+            value={name}
+            label="Name"
+            onChange={nameChangeHandler}
+            variant="outlined"
+          />
+        </ListItem>
+        <ListItem>
+          <IndustrySelect
+            value={industry}
+            onChange={industryChangeHandler}
+            variant="outlined"
+          />
+        </ListItem>
+        <ListItem>
+          <TextField
+            value={website}
+            label="Website"
+            onChange={websiteChangeHandler}
+            variant="outlined"
+          />
+        </ListItem>
+        <ListItem>
+          <TextField
+            value={address}
+            label="Address"
+            onChange={addressChangeHandler}
+            variant="outlined"
+          />
+        </ListItem>
+        <ListItem style={{ justifyContent: "center" }}>
+          <Button onClick={clearAllHandler} color="secondary">
+            Clear All
+          </Button>
+        </ListItem>{" "}
+      </List>
+    </Popover>
   );
 };
 

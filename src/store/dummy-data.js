@@ -7,61 +7,61 @@ const dummyData = {
       address: "123 Some Lane",
       industry: "Some industry",
       stage: "Negotiations",
-      interactions: [
-        {
+      interactions: {
+        id1: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 1 Email 1",
           timeSent: new Date().toISOString(),
         },
-        {
+        id2: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 1 Email 2",
           time: new Date(0).toISOString(),
         },
-        {
+        id3: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           time: new Date().toISOString(),
           subject: "Notes regarding call with lead 1",
         },
-        {
+        id4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           timeMade: new Date(0).toISOString(),
           subject: "More notes regarding another call with lead 1",
         },
-      ],
+      },
 
-      tasks: [
-        {
+      tasks: {
+        t1: {
           actionType: "Task",
           title: "Lead 1 Task 1",
           taskTypeId: 0,
           taskType: "Do something",
           timeDue: new Date().toISOString(),
         },
-        {
+        t2: {
           actionType: "Task",
           title: "Lead 1 Task 2",
           typeId: 1,
           taskType: "Do something else",
           timeDue: new Date(0).toISOString(),
         },
-      ],
-      notes: [
-        {
+      },
+      notes: {
+        n1: {
           actionType: "Note",
           title: "Lead 1 Note 1",
           text: "[Note regarding lead 1]",
         },
-        {
+        n2: {
           actionType: "Note",
           title: "Lead 1 Note 2",
           text: "[Another note regarding lead 1]",
         },
-      ],
+      },
     },
     l2: {
       name: "Lead No. 2",
@@ -69,46 +69,45 @@ const dummyData = {
       website: "www.lead2.com",
       address: "456 Some Street",
       industry: "Some other industry",
-      interactions: [
-        {
+      interactions: {
+        i1: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 2 Email 1",
           timeSent: new Date().toISOString(),
         },
-        {
+        i2: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 2 Email 2",
           time: new Date(0).toISOString(),
         },
-        {
+        i3: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           time: new Date().toISOString(),
           subject: "Notes regarding call with lead 2",
         },
-        {
+        i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           timeMade: new Date(0).toISOString(),
           subject: "More notes regarding another call with lead 2",
         },
-      ],
-
-      tasks: [],
-      notes: [
-        {
+      },
+      tasks: {},
+      notes: {
+        n1: {
           actionType: "Note",
           title: "Lead 2 Note 1",
           text: "Note regarding lead 2.  This one is extra long in order to demonstrate the effects of having a note length greater than one single line of text",
         },
-        {
+        n2: {
           actionType: "Note",
           title: "Lead 2 Note 2",
           text: "[Another note regarding lead 2]",
         },
-      ],
+      },
     },
   },
 
@@ -119,60 +118,59 @@ const dummyData = {
       website: "www.account1.com",
       address: "789 Some Ave",
       industry: "Some industry",
-      interactions: [
-        {
+      interactions: {
+        i1: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 1 Email 1",
           timeSent: new Date().toISOString(),
         },
-        {
+        i2: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 1 Email 2",
           time: new Date(0).toISOString(),
         },
-        {
+        i3: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           time: new Date().toISOString(),
           subject: "Notes regarding call with account 1",
         },
-        {
+        i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           timeMade: new Date(0).toISOString(),
           subject: "More notes regarding another call with account 1",
         },
-      ],
-
-      tasks: [
-        {
+      },
+      tasks: {
+        t1: {
           actionType: "Task",
           title: "Account 1 Task 1",
           taskTypeId: 0,
           taskType: "Do something",
           timeDue: new Date(0).toISOString(),
         },
-        {
+        t2: {
           actionType: "Task",
           title: "Account 1 Task 2",
           typeId: 1,
           taskType: "Do something else",
         },
-      ],
-      notes: [
-        {
+      },
+      notes: {
+        n1: {
           actionType: "Note",
           title: "Account 1 Note 1",
           text: "[Note regarding account 1]",
         },
-        {
+        n2: {
           actionType: "Note",
           title: "Account 1 Note 2",
           text: "[Another note regarding account 1]",
         },
-      ],
+      },
     },
     a2: {
       name: "Account No. 2",
@@ -180,61 +178,60 @@ const dummyData = {
       website: "www.account2.com",
       address: "102 Some Parkway",
       industry: "Some other industry",
-      interactions: [
-        {
+      interactions: {
+        i1: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 2 Email 1",
           timeSent: new Date().toISOString(),
         },
-        {
+        i2: {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 2 Email 2",
           time: new Date(0).toISOString(),
         },
-        {
+        i3: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           time: new Date().toISOString(),
           subject: "Notes regarding call with account 2",
         },
-        {
+        i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
           timeMade: new Date(0).toISOString(),
           subject: "More notes regarding another call with account 2",
         },
-      ],
-
-      tasks: [
-        {
+      },
+      tasks: {
+        t1: {
           actionType: "Task",
           title: "Account 2 Task 1",
           taskTypeId: 0,
           taskType: "Do something",
           timeDue: new Date().toISOString(),
         },
-        {
+        t2: {
           actionType: "Task",
           title: "Account 2 Task 2",
           typeId: 1,
           taskType: "Do something else",
           timeDue: new Date(0).toISOString(),
         },
-      ],
-      notes: [
-        {
+      },
+      notes: {
+        n1: {
           actionType: "Note",
           title: "Account 2 Note 1",
           text: "[Note regarding account 2]",
         },
-        {
+        n2: {
           actionType: "Note",
           title: "Account 2 Note 2",
           text: "[Another note regarding account 2]",
         },
-      ],
+      },
     },
   },
 };

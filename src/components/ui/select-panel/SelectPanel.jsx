@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   AppBar,
+  Badge,
   IconButton,
   Paper,
   Tab,
@@ -16,6 +17,7 @@ import FilterIcon from "@material-ui/icons/FilterList";
  * The `tabs` prop holds an array of tab names.
  * The `bodies` prop holds holds an array of coresponding bodies.
  * `filterMenuComponent` prop can specify a menu component for the filter button.
+ * `hideFilterBadge` prop controls visibilty of filter badge
  */
 const SelectPanel = (props) => {
   const [tab, setTab] = useState(0); // really initialized in useEffect
@@ -39,7 +41,9 @@ const SelectPanel = (props) => {
   const FilterMenuComponent = props.filterMenuComponent;
 
   const filterClickHandler = (event) => {
-    setFilterMenuAnchorEl(event.currentTarget);
+    filterMenuAnchorEl
+      ? setFilterMenuAnchorEl(null)
+      : setFilterMenuAnchorEl(event.currentTarget);
   };
 
   const filterCloseHandler = (event) => {
@@ -63,8 +67,17 @@ const SelectPanel = (props) => {
               title="filter"
               onClick={filterClickHandler}
               style={{ borderRadius: 0 }}
+              color={filterMenuIsOpen ? "primary" : undefined}
             >
-              <FilterIcon />
+              <Badge
+                invisible={props.hideFilterBadge}
+                variant="dot"
+                color="primary"
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              >
+                <FilterIcon />
+              </Badge>
             </IconButton>
             <FilterMenuComponent
               open={filterMenuIsOpen}

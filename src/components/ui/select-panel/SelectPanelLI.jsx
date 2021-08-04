@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Collapse,
   IconButton,
@@ -15,6 +15,9 @@ const SelectPanelLI = (props) => {
   const [open, setOpen] = useState(false);
   const expandable = !!props.children;
 
+  // get query string to avoid changing it
+  const search = useLocation().search;
+
   const toggleHandler = (event) => {
     setOpen((openState) => !openState);
   };
@@ -26,7 +29,7 @@ const SelectPanelLI = (props) => {
         onClick={props.onClick}
         component={props.component || NavLink}
         ContainerComponent="div"
-        to={props.to}
+        to={props.to ? props.to + search : undefined}
         selected={props.selected}
         divider
       >
@@ -46,11 +49,7 @@ const SelectPanelLI = (props) => {
           </ListItemSecondaryAction>
         )}
       </ListItem>
-      <Collapse
-        in={open}
-        timeout="auto"
-        unmountOnExit
-      >
+      <Collapse in={open} timeout="auto" unmountOnExit>
         {props.children}
       </Collapse>
     </>

@@ -10,14 +10,14 @@ const ActionFilterMenu = (props) => {
   // get query params after mounting
   useEffect(() => {
     const params = new URLSearchParams(search);
-    if (params.has("searchStr")) setSearchStr(params.get("searchStr"));
+    if (params.has("actionSearch")) setSearchStr(params.get("actionSearch"));
   }, []);
 
   // debounce changes to url
   useEffect(() => {
     const timer = setTimeout(() => {
       const params = new URLSearchParams(search);
-      params.set("searchStr", searchStr);
+      params.set("actionSearch", searchStr);
       history.replace({ search: params.toString() });
     }, 500);
     return () => clearTimeout(timer);
@@ -41,7 +41,7 @@ const ActionFilterMenu = (props) => {
       </ListItem>
       <ListItem style={{ justifyContent: "center" }}>
         <Button onClick={clearAllHandler} color="secondary">
-          Clear All
+          Clear
         </Button>
       </ListItem>
     </Menu>

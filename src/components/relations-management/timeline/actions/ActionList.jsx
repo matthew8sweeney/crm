@@ -4,12 +4,13 @@ import { List, Typography } from "@material-ui/core";
 const ActionList = (props) => {
   const Component = props.component;
 
-  if (props.data.length > 0)
+  if (Object.keys(props.data).length > 0)
     return (
       <List>
-        {props.data.map((actionObj, i) => (
-          <Component component="li" data={actionObj} key={i} />
-        ))}
+        {Object.keys(props.data).map((actionId, i) => {
+          const actionObj = props.data[actionId];
+          return <Component component="li" data={actionObj} key={i} />;
+        })}
       </List>
     );
 
