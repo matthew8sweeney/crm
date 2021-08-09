@@ -26,6 +26,23 @@ const filterActionData = (actionData, searchStr) => {
   return Object.fromEntries(filteredKeys.map((key) => [key, actionData[key]]));
 };
 
+/**
+ * Transform a mapping of id->object
+ * into array of objects containing their own ids
+ */
+const selfContain = (mapping) => {
+  const arr = [];
+  for (const key in mapping) {
+    const obj = { ...mapping[key] };
+    obj.id = key;
+    arr.push(obj);
+  }
+  return arr;
+};
+
+const filterAndTransform = (data, searchStr) =>
+  selfContain(filterActionData(data, searchStr));
+
 const ActionSelectPanel = (props) => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
@@ -39,7 +56,7 @@ const ActionSelectPanel = (props) => {
   const customersData = useSelector((state) => state.data);
   let data;
   if (pathSegments.length >= 3) {
-    data = customersData[pathSegments[2] + "s"][pathSegments[3]];
+    data = customersData[pathSegments[2]][pathSegments[3]];
   }
 
   let interactionData = [];
@@ -47,11 +64,10 @@ const ActionSelectPanel = (props) => {
   let noteData = [];
   let allData = [];
   if (typeof data !== "undefined") {
-    interactionData = filterActionData(data.interactions, searchStr);
-    taskData = filterActionData(data.tasks, searchStr);
-    noteData = filterActionData(data.notes, searchStr);
-    // TODO fit different action types into same object
-    // allData = [...data.interactions, ...data.tasks, ...data.notes];
+    interactionData = filterAndTransform(data.interactions, searchStr);
+    taskData = filterAndTransform(data.tasks, searchStr);
+    noteData = filterAndTransform(data.notes, searchStr);
+    allData = [...interactionData, ...taskData, ...noteData];
   }
 
   let tab;

@@ -84,7 +84,6 @@ const NewItemDialog = (props) => {
   };
 
   const submitHandler = () => {
-    console.log(formRef);
     formRef.current.requestSubmit();
   };
 

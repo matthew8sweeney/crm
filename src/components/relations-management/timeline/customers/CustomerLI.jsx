@@ -47,7 +47,7 @@ const InfoRow = (props) => (
 
 const CustomerLI = (props) => {
   const data = useSelector(
-    (state) => state.data[props.type + "s"][props.customerKey]
+    (state) => state.data[props.type][props.customerKey]
   );
 
   let websiteUrl = data.website;

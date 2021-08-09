@@ -47,8 +47,8 @@ const CustomerSelectPanel = (props) => {
       tabs={["Leads", "Accounts"]}
       activeTab={pathSegments[2] === "account" ? 1 : 0}
       bodies={[
-        <CustomerList data={leadData} type="lead" />,
-        <CustomerList data={accountData} type="account" />,
+        <CustomerList data={leadData} type="leads" />,
+        <CustomerList data={accountData} type="accounts" />,
       ]}
       filterMenuComponent={CustomerFilterMenu}
       hideFilterBadge={!filterIsActive}
