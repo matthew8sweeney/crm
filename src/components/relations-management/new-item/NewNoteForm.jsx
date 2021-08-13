@@ -1,23 +1,27 @@
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { TextField } from "@material-ui/core";
 
+import { dataActions } from "../../../store/data-slice";
 import { uiActions } from "../../../store/ui-slice";
 import ValidTextField from "../../ui/ValidTextField";
 import CustomerAutocomplete from "./CustomerAutocomplete";
-
-const isValidText = (str) => typeof str === "string" && str.length > 0;
+import { isValidText } from "../../../lib/text";
 
 const NewNoteForm = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const customerRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
-  const [textError, setTextError] = useState("");
+  const [customer, setCustomer] = useState(null);
   const [customerError, setCustomerError] = useState("");
+  const [textError, setTextError] = useState("");
 
   const customerChangeHandler = (event, newValue) => {
-    if (newValue == null) return;
-    if (isValidText(newValue.name)) setCustomerError("");
+    if (newValue != null) {
+      setCustomer(newValue);
+      setCustomerError("");
+    }
   };
 
   const textChangeHandler = (event) => {
@@ -39,26 +43,26 @@ const NewNoteForm = React.forwardRef((props, ref) => {
       inputsAreValid = false;
     }
     // note must be associated w/ a lead or account
-    if (!isValidText(customerRef.current.value)) {
+    if (customer == null) {
       setCustomerError("Select a contact");
       customerRef.current.focus();
       inputsAreValid = false;
     }
 
     if (inputsAreValid) {
-      // create new note
-
+      dispatch(
+        dataActions.createNote(
+          { title: titleRef.current.value, text: textRef.current.value },
+          customer.type,
+          customer.id
+        )
+      );
       dispatch(uiActions.hideNewItemDialog());
     }
   };
 
   return (
-    <form
-      onSubmit={submitHandler}
-      ref={ref}
-      className={props.className}
-      style={{ width: 300, maxWidth: "calc(95vw-100px)" }}
-    >
+    <form onSubmit={submitHandler} ref={ref} className={props.className}>
       <CustomerAutocomplete
         onChange={customerChangeHandler}
         errorText={customerError}
@@ -69,12 +73,10 @@ const NewNoteForm = React.forwardRef((props, ref) => {
         inputRef={titleRef}
         errorText={textError}
         onChange={textChangeHandler}
-        fullwidth
       />
-      <ValidTextField
+      <TextField
         label="Note Text"
         inputRef={textRef}
-        errorText={textError}
         onChange={textChangeHandler}
         multiline
       />

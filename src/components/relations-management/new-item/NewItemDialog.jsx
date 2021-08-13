@@ -20,7 +20,7 @@ import NewAccountForm from "./NewAccountForm";
 import NewInteractionForm from "./NewInteractionForm";
 import NewTaskForm from "./NewTaskForm";
 import NewNoteForm from "./NewNoteForm";
-import classes from "./NewItemDialog.module.css"
+import classes from "./NewItemDialog.module.css";
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide ref={ref} direction="up" unmountOnExit {...props} />
@@ -92,12 +92,13 @@ const NewItemDialog = (props) => {
       open={isOpen}
       onClose={cancelHandler}
       TransitionComponent={Transition}
+      PaperProps={{ className: classes.dialog }}
     >
       <DialogTitle>
-        {/* Create New <NewItemsMenu currentItem={newItemName} /> */}
+        {/* TODO menu to change what item you are adding? (lead/task/note/etc) /> */}
         Create New {newItemName}
       </DialogTitle>
-      <DialogContent style={{ overflow: "hidden" }}>
+      <DialogContent className={classes.content}>
         <NewItemForm ref={formRef} className={classes.form} />
       </DialogContent>
       <DialogActions>

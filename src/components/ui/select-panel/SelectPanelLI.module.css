@@ -1,3 +1,13 @@
+/* shading for items */
+.item:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.015);
+}
 
 /* the "expand" chevron icon */
 .toggle-button > span > svg {
@@ -7,14 +17,3 @@
 .toggle-button--flipped > span > svg {
     transform: rotate(180deg);
 }
-
-/* irellevant testing */
-/* @font-face {
-    font-family: Roboto;
-    src: url(googleAPIs.com/whatever);
-}
-p{
-    background-color: aliceblue;
-    overflow: hidden;
-    text-indent: -10px;
-} */

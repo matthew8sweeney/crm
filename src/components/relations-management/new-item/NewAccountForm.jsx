@@ -1,11 +1,9 @@
-import {
-  TextField,
-} from "@material-ui/core";
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { TextField } from "@material-ui/core";
+
 import { dataActions } from "../../../store/data-slice";
 import { uiActions } from "../../../store/ui-slice";
-
 import ValidTextField from "../../ui/ValidTextField";
 import IndustrySelect from "../IndustrySelect";
 
@@ -16,12 +14,16 @@ const NewAccountForm = React.forwardRef((props, ref) => {
   const accountNameRef = useRef();
   const websiteRef = useRef();
   const addressRef = useRef();
-  const industryRef = useRef();
   const [accountNameError, setAccountNameError] = useState("");
+  const [industryId, setIndustryId] = useState("");
 
   const accountNameChangeHandler = (event) => {
     const newAccountName = accountNameRef.current.value;
     if (isValidName(newAccountName)) setAccountNameError("");
+  };
+
+  const industryChangeHandler = (event, newValue) => {
+    setIndustryId(newValue.id);
   };
 
   const submitHandler = (event) => {
@@ -35,7 +37,14 @@ const NewAccountForm = React.forwardRef((props, ref) => {
     }
 
     if (inputsAreValid) {
-      // dispatch(dataActions.CreateNewAccount({name: accountNameRef.current.value}))
+      dispatch(
+        dataActions.createAccount({
+          name: accountNameRef.current.value,
+          website: websiteRef.current.value,
+          address: addressRef.current.value,
+          industryId,
+        })
+      );
       dispatch(uiActions.hideNewItemDialog());
     }
   };
@@ -50,7 +59,7 @@ const NewAccountForm = React.forwardRef((props, ref) => {
       />
       <TextField label="Website" inputRef={websiteRef} />
       <TextField label="Address" inputRef={addressRef} />
-      <IndustrySelect ref={industryRef} />
+      <IndustrySelect onChange={industryChangeHandler} />
     </form>
   );
 });

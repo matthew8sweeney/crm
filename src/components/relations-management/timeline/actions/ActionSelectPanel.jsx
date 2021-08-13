@@ -55,7 +55,7 @@ const ActionSelectPanel = (props) => {
 
   const customersData = useSelector((state) => state.data);
   let data;
-  if (pathSegments.length >= 3) {
+  if (pathSegments.some(str=>str.match(/(leads|accounts)/))) {
     data = customersData[pathSegments[2]][pathSegments[3]];
   }
 

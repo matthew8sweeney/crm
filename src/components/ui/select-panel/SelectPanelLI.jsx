@@ -32,6 +32,7 @@ const SelectPanelLI = (props) => {
         to={props.to ? props.to + search : undefined}
         selected={props.selected}
         divider
+        className={classes.item}
       >
         <ListItemText primary={props.primary} secondary={props.secondary} />
         {expandable && (

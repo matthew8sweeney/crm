@@ -29,7 +29,8 @@ function App() {
   useEffect(() => {
     // load data when user is authenticated
     if (loggedIn) {
-      dispatch(dataActions.replaceData(dummyData));
+      // dispatch(dataActions.replaceData(dummyData));  // show dummy data by default
+      dispatch(dataActions.loadData());
     }
   }, [dispatch, loggedIn]);
 

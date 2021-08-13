@@ -1,6 +1,4 @@
-import {
-  TextField,
-} from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dataActions } from "../../../store/data-slice";
@@ -16,12 +14,16 @@ const NewLeadForm = React.forwardRef((props, ref) => {
   const leadNameRef = useRef();
   const websiteRef = useRef();
   const addressRef = useRef();
-  const industryRef = useRef();
   const [leadNameError, setLeadNameError] = useState("");
+  const [industryId, setIndustryId] = useState("");
 
   const leadNameChangeHandler = (event) => {
     const newLeadName = leadNameRef.current.value;
     if (isValidName(newLeadName)) setLeadNameError("");
+  };
+
+  const industryChangeHandler = (event, newValue) => {
+    setIndustryId(newValue.id);
   };
 
   const submitHandler = (event) => {
@@ -35,7 +37,14 @@ const NewLeadForm = React.forwardRef((props, ref) => {
     }
 
     if (inputsAreValid) {
-      // dispatch(dataActions.CreateNewLead({name: leadNameRef.current.value}))
+      dispatch(
+        dataActions.createLead({
+          name: leadNameRef.current.value,
+          website: websiteRef.current.value,
+          address: addressRef.current.value,
+          industryId,
+        })
+      );
       dispatch(uiActions.hideNewItemDialog());
     }
   };
@@ -50,7 +59,7 @@ const NewLeadForm = React.forwardRef((props, ref) => {
       />
       <TextField label="Website" inputRef={websiteRef} />
       <TextField label="Address" inputRef={addressRef} />
-      <IndustrySelect ref={industryRef} />
+      <IndustrySelect onChange={industryChangeHandler} />
     </form>
   );
 });

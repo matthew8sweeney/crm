@@ -72,7 +72,7 @@ const SelectPanel = (props) => {
               <Badge
                 invisible={props.hideFilterBadge}
                 variant="dot"
-                color="primary"
+                color="secondary"
                 overlap="circular"
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               >

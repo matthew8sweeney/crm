@@ -12,7 +12,7 @@ const dummyData = {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 1 Email 1",
-          timeSent: new Date().toISOString(),
+          time: new Date().toISOString(),
         },
         id2: {
           actionType: "Interaction",
@@ -29,7 +29,7 @@ const dummyData = {
         id4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
-          timeMade: new Date(0).toISOString(),
+          time: new Date(0).toISOString(),
           subject: "More notes regarding another call with lead 1",
         },
       },
@@ -74,7 +74,7 @@ const dummyData = {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Lead 2 Email 1",
-          timeSent: new Date().toISOString(),
+          time: new Date().toISOString(),
         },
         i2: {
           actionType: "Interaction",
@@ -91,7 +91,7 @@ const dummyData = {
         i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
-          timeMade: new Date(0).toISOString(),
+          time: new Date(0).toISOString(),
           subject: "More notes regarding another call with lead 2",
         },
       },
@@ -123,7 +123,7 @@ const dummyData = {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 1 Email 1",
-          timeSent: new Date().toISOString(),
+          time: new Date().toISOString(),
         },
         i2: {
           actionType: "Interaction",
@@ -140,7 +140,7 @@ const dummyData = {
         i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
-          timeMade: new Date(0).toISOString(),
+          time: new Date(0).toISOString(),
           subject: "More notes regarding another call with account 1",
         },
       },
@@ -183,7 +183,7 @@ const dummyData = {
           actionType: "Interaction",
           interactionType: "Email",
           subject: "Account 2 Email 1",
-          timeSent: new Date().toISOString(),
+          time: new Date().toISOString(),
         },
         i2: {
           actionType: "Interaction",
@@ -200,7 +200,7 @@ const dummyData = {
         i4: {
           actionType: "Interaction",
           interactionType: "Phone Call",
-          timeMade: new Date(0).toISOString(),
+          time: new Date(0).toISOString(),
           subject: "More notes regarding another call with account 2",
         },
       },
@@ -233,6 +233,18 @@ const dummyData = {
         },
       },
     },
+  },
+  interactionTypes: {
+    t1: { name: "Phone Call" },
+    t2: { name: "Email" },
+    t3: { name: "Video Call" },
+    t4: { name: "Meeting" },
+    t5: { name: "Other" },
+  },
+  industries: {
+    i1: { name: "Paper" },
+    i2: { name: "Steel" },
+    i3: { name: "IT" },
   },
 };
 

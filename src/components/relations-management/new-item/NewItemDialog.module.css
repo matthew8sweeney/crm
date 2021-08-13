@@ -1,4 +1,10 @@
-.form {
+div.dialog {
+    width: 400px;
+    max-width: 95vw;
+    margin: 0;
+}
+
+form.form {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

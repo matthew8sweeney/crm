@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { Autocomplete } from "@material-ui/lab";
 
+import { autocompleteOptionObjectCompare } from "../../../lib/autocomplete";
 import ValidTextField from "../../ui/ValidTextField";
 
 /**
@@ -40,16 +41,16 @@ const CustomerAutocomplete = (props) => {
   }
   const [value, setValue] = useState(defaultValue);
 
+  //TODO useImperativeHandle to access default value from parent components
+
   return (
     <Autocomplete
       value={value}
       options={optionsArray}
       getOptionLabel={(option) => option.name}
-      getOptionSelected={(option, value) =>
-        Object.keys(option).every((key) => option[key] === value[key])
-      }
+      getOptionSelected={autocompleteOptionObjectCompare }
       groupBy={(option) => option.type}
-      freesolo={props.freesolo}
+      freeSolo={props.freesolo}
       onChange={(e, newVal) => {
         setValue(newVal);
         props.onChange(e, newVal);

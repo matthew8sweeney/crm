@@ -12,9 +12,11 @@ const filterCustomerData = (customerData, filterConfig) => {
     let result = true;
     for (const criterionKey in filterConfig) {
       const dataVal = customerData[customerKey][criterionKey];
-      const criterionTerms = filterConfig[criterionKey].split(" ");
-      const criterion = new RegExp(`(${criterionTerms.join(").*(")})`, "i");
-      result = result && dataVal.match(criterion);
+      if (typeof dataVal === "string") {
+        const criterionTerms = filterConfig[criterionKey].split(" ");
+        const criterion = new RegExp(`(${criterionTerms.join(").*(")})`, "i");
+        result = result && dataVal.match(criterion);
+      }
     }
     return result;
   });
