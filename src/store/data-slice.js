@@ -5,32 +5,20 @@ import { manageJsonRequest } from "../lib/api";
 const FIREBASE_URL = "https://ms-crm-web-app-default-rtdb.firebaseio.com/";
 
 const initialState = { leads: {}, accounts: {} };
-// const stateShape =
-// {
+// const stateShape = {
 //   leads: {
 //     leadId: {
-//       interactions: {
-//         emails: [
-//           "{email objects}",
-//         ],
-//         phoneCalls: [
-//           "{phoneCall objects}",
-//         ]
-//       },
-//       tasks: [
-//         "{task objects}",
-//       ],
-//       notes: [
-//         "{note objects}",
-//       ]
+//       interactions: { interactionId: { interactionObject } },
+//       tasks: { taskId: { taskObject } },
+//       notes: { noteId: { noteObject } },
 //     },
 //   },
 //   accounts: "(same as leads)",
 //   interactionTypes: {
-//     t1: { name: "str" },
+//     id: { name: "str" },
 //   },
 //   industries: {
-//     i1: { name: "str" },
+//     id: { name: "str" },
 //   },
 // };
 
@@ -41,6 +29,17 @@ const initialCustomerState = {
   notes: {},
 };
 
+const initialInteractionState = {
+  actionType: "Interaction",
+  interactionTypeId: "",
+};
+
+const initialTaskState = {
+  actionType: "Task",
+  title: "",
+  description: "",
+};
+
 const initialNoteState = {
   actionType: "Note",
   title: "",
@@ -48,7 +47,7 @@ const initialNoteState = {
 };
 
 /**
- * Fill in empty/default values where backend had nothing
+ * Fill in empty/default values where backend has nothing
  */
 const normalizeCustomersState = (customersState) => {
   for (const customerId in customersState) {
@@ -56,17 +55,28 @@ const normalizeCustomersState = (customersState) => {
       ...initialCustomerState,
       ...customersState[customerId],
     };
-    normalizeNotesState(customersState[customerId].notes);
+    const customerState = customersState[customerId];
+    normalizeActionsState(customerState.interactions, initialInteractionState);
+    normalizeActionsState(customerState.tasks, initialTaskState);
+    normalizeActionsState(customerState.notes, initialNoteState);
   }
 };
 
-const normalizeNotesState = (notesState) => {
-  for (const noteId in notesState) {
-    notesState[noteId] = {
-      ...initialNoteState,
-      ...notesState[noteId],
+const normalizeActionsState = (actionsState, initialActionState) => {
+  for (const actionId in actionsState) {
+    actionsState[actionId] = {
+      ...initialActionState,
+      ...actionsState[actionId],
     };
   }
+};
+
+const addAction = (state, payload, actionType, initialActionState) => {
+  const customer = state[payload.customerType][payload.customerId];
+  customer[actionType][payload.actionId] = {
+    ...initialActionState,
+    ...payload.data,
+  };
 };
 
 const dataSlice = createSlice({
@@ -84,14 +94,14 @@ const dataSlice = createSlice({
       const id = action.payload.id;
       customers[id] = { ...initialCustomerState, ...action.payload.data };
     },
+    addInteraction(state, action) {
+      addAction(state, action.payload, "interactions", initialInteractionState);
+    },
+    addTask(state, action) {
+      addAction(state, action.payload, "tasks", initialTaskState);
+    },
     addNote(state, action) {
-      const customerType = action.payload.customerType;
-      const customerId = action.payload.customerId;
-      const customer = state[customerType][customerId];
-      customer.notes[action.payload.noteId] = {
-        ...initialNoteState,
-        ...action.payload.data,
-      };
+      addAction(state, action.payload, "notes", initialNoteState);
     },
   },
 });
@@ -110,16 +120,13 @@ const loadData = () => {
   };
 };
 
-const createCustomer = (customerData, path) => {
+const createCustomer = (customerData, customerType) => {
   return async (dispatch) => {
-    const data = await manageJsonRequest(
-      {
-        url: `${FIREBASE_URL}/${path}.json`,
-        method: "POST",
-        body: customerData,
-      },
-      dispatch
-    );
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${customerType}.json`,
+      method: "POST",
+      body: customerData,
+    });
 
     // console.log(data);
     if (data instanceof Error) {
@@ -127,7 +134,7 @@ const createCustomer = (customerData, path) => {
     } else {
       dispatch(
         dataActions.addCustomer({
-          type: path,
+          type: customerType,
           id: data.name,
           data: customerData,
         })
@@ -139,37 +146,57 @@ const createCustomer = (customerData, path) => {
 const createLead = (leadData) => createCustomer(leadData, "leads");
 const createAccount = (accountData) => createCustomer(accountData, "accounts");
 
-const createNote = (noteData, customerType, customerId) => {
+const createAction = (
+  actionData,
+  customerType,
+  customerId,
+  actionType,
+  reducer
+) => {
   return async (dispatch) => {
-    const data = await manageJsonRequest(
-      {
-        url: `${FIREBASE_URL}/${customerType}/${customerId}/notes.json`,
-        method: "POST",
-        body: noteData,
-      },
-      dispatch
-    );
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${customerType}/${customerId}/${actionType}.json`,
+      method: "POST",
+      body: actionData,
+    });
 
     if (data instanceof Error) {
       // notify failure
     } else {
       dispatch(
-        dataActions.addNote({
+        reducer({
           customerType,
           customerId,
-          noteId: data.name,
-          data: noteData,
+          actionId: data.name,
+          data: actionData,
         })
       );
     }
   };
 };
 
+const createInteraction = (data, customerType, customerId) =>
+  createAction(
+    data,
+    customerType,
+    customerId,
+    "interactions",
+    dataActions.addInteraction
+  );
+
+const createTask = (data, customerType, customerId) =>
+  createAction(data, customerType, customerId, "tasks", dataActions.addTask);
+
+const createNote = (data, customerType, customerId) =>
+  createAction(data, customerType, customerId, "notes", dataActions.addNote);
+
 export const dataActions = {
   ...dataSlice.actions,
   loadData,
   createLead,
   createAccount,
+  createInteraction,
+  createTask,
   createNote,
 };
 

@@ -11,17 +11,14 @@ import { isValidText } from "../../../lib/text";
 const NewNoteForm = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const customerRef = useRef();
+  const customerValueRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
-  const [customer, setCustomer] = useState(null);
   const [customerError, setCustomerError] = useState("");
   const [textError, setTextError] = useState("");
 
   const customerChangeHandler = (event, newValue) => {
-    if (newValue != null) {
-      setCustomer(newValue);
-      setCustomerError("");
-    }
+    if (newValue != null) setCustomerError("");
   };
 
   const textChangeHandler = (event) => {
@@ -43,6 +40,7 @@ const NewNoteForm = React.forwardRef((props, ref) => {
       inputsAreValid = false;
     }
     // note must be associated w/ a lead or account
+    const customer = customerValueRef.current.value;
     if (customer == null) {
       setCustomerError("Select a contact");
       customerRef.current.focus();
@@ -67,6 +65,7 @@ const NewNoteForm = React.forwardRef((props, ref) => {
         onChange={customerChangeHandler}
         errorText={customerError}
         inputRef={customerRef}
+        ref={customerValueRef}
       />
       <ValidTextField
         label="Note Title"

@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { TextField } from "@material-ui/core";
 
+import { dataActions } from "../../../store/data-slice";
 import { uiActions } from "../../../store/ui-slice";
 import CustomerAutocomplete from "./CustomerAutocomplete";
 import ValidTextField from "../../ui/ValidTextField";
@@ -11,15 +12,14 @@ const isValidText = (str) => typeof str === "string" && str.length > 0;
 const NewTaskForm = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const customerRef = useRef();
+  const customerValueRef = useRef();
   const nameRef = useRef();
   const descriptionRef = useRef();
   const [customerError, setCustomerError] = useState("");
   const [nameError, setNameError] = useState("");
-  // const [descriptionError, setDescriptionError] = useState("");
 
   const customerChangeHandler = (event, newValue) => {
-    if (newValue == null) return;
-    if (isValidText(newValue.name)) setCustomerError("");
+    if (newValue != null) setCustomerError("");
   };
 
   const nameChangeHandler = (event) => {
@@ -38,14 +38,24 @@ const NewTaskForm = React.forwardRef((props, ref) => {
       inputsAreValid = false;
     }
     // task must be associated w/ a lead or account
-    if (!isValidText(customerRef.current.value)) {
+    const customer = customerValueRef.current.value;
+    if (customer == null) {
       setCustomerError("Select a contact");
       customerRef.current.focus();
       inputsAreValid = false;
     }
 
     if (inputsAreValid) {
-      // create new task
+      dispatch(
+        dataActions.createTask(
+          {
+            title: nameRef.current.value,
+            description: descriptionRef.current.value,
+          },
+          customer.type,
+          customer.id
+        )
+      );
 
       dispatch(uiActions.hideNewItemDialog());
     }
@@ -57,6 +67,7 @@ const NewTaskForm = React.forwardRef((props, ref) => {
         onChange={customerChangeHandler}
         errorText={customerError}
         inputRef={customerRef}
+        ref={customerValueRef}
       />
       <ValidTextField
         label="Task Name"
@@ -64,11 +75,7 @@ const NewTaskForm = React.forwardRef((props, ref) => {
         errorText={nameError}
         onChange={nameChangeHandler}
       />
-      <TextField
-        label="Task Description"
-        inputRef={descriptionRef}
-        multiline
-      />
+      <TextField label="Task Description" inputRef={descriptionRef} multiline />
     </form>
   );
 });

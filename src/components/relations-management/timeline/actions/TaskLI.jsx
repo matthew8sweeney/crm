@@ -6,7 +6,7 @@ const TaskLI = (props) => {
     <SelectPanelLI
       component={props.component}
       primary={props.data.title}
-      secondary={props.data.taskType}
+      secondary={props.data.description}
     ></SelectPanelLI>
   );
 };

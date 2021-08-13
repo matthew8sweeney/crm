@@ -12,6 +12,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import SelectPanelLI from "../../../ui/select-panel/SelectPanelLI";
 import classes from "./CustomerLI.module.css";
 
+const MAP_SEARCH_URL = "https://www.google.com/maps/search/";
+
 const MaybeLink = (props) => {
   if (props.href) {
     return (
@@ -46,33 +48,35 @@ const InfoRow = (props) => (
 );
 
 const CustomerLI = (props) => {
-  const data = useSelector(
-    (state) => state.data[props.type][props.customerKey]
+  const customer = useSelector(
+    (state) => state.data[props.type][props.customerId]
   );
+  const industries = useSelector((state) => state.data.industries);
+  let industryName = "";
+  if (customer.industryId in industries)
+    industryName = industries[customer.industryId].name;
 
-  let websiteUrl = data.website;
+  let websiteUrl = customer.website;
   if (!websiteUrl.startsWith("https://")) {
     websiteUrl = websiteUrl.replace(/^(http:\/\/)|(https:\/\/)|/, "https://");
   }
 
-  const mapSearchUrl = "https://www.google.com/maps/search/";
-
   return (
     <SelectPanelLI
-      to={`/timeline/${props.type}/${props.customerKey}`}
-      primary={data.name}
-      secondary={data.latestAction}
+      to={`/timeline/${props.type}/${props.customerId}`}
+      primary={customer.name}
+      secondary={customer.latestAction}
       selected={props.selected}
     >
       <Table size="small">
         <TableBody>
-          <InfoRow name="Website" value={data.website} href={websiteUrl} />
+          <InfoRow name="Website" value={customer.website} href={websiteUrl} />
           <InfoRow
             name="Address"
-            value={data.address}
-            href={mapSearchUrl + data.address}
+            value={customer.address}
+            href={MAP_SEARCH_URL + customer.address}
           />
-          <InfoRow name="Industry" value={data.industry} />
+          <InfoRow name="Industry" value={industryName} />
           {/* <InfoRow name="Owner" value={data.owner}  /> */}
         </TableBody>
       </Table>

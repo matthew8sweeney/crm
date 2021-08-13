@@ -2,35 +2,31 @@ import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { TextField } from "@material-ui/core";
 
-import { isValidText } from "../../../lib/text";
+import { dataActions } from "../../../store/data-slice";
 import { uiActions } from "../../../store/ui-slice";
 import CustomerAutocomplete from "./CustomerAutocomplete";
 import InteractionTypeAutoComplete from "../InteractionTypeAutoComplete";
+import { isValidText } from "../../../lib/text";
 
 const NewInteractionForm = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const customerRef = useRef();
+  const customerValueRef = useRef();
   const typeRef = useRef();
   const descriptionRef = useRef();
   const [customerError, setCustomerError] = useState("");
   const [typeError, setTypeError] = useState("");
+  const [type, setType] = useState(null);
 
   const customerChangeHandler = (event, newValue) => {
-    if (newValue == null) return;
-    if (isValidText(newValue.name)) setCustomerError("");
+    if (newValue != null) setCustomerError("");
   };
 
   const typeChangeHandler = (event, newValue) => {
-    console.log(newValue);
-    // if custom type
-    if (typeof newValue === "undefined") {
-      console.log(typeRef.current.value);
+    if (newValue != null) {
+      setType(newValue);
       setTypeError("");
     }
-    // if empty
-    if (newValue == null) return;
-    // if one of the provided options
-    if (isValidText(newValue.name)) setTypeError("");
   };
 
   const submitHandler = (event) => {
@@ -44,14 +40,24 @@ const NewInteractionForm = React.forwardRef((props, ref) => {
       inputsAreValid = false;
     }
     // interaction must be associated w/ a lead or account
-    if (!isValidText(customerRef.current.value)) {
+    const customer = customerValueRef.current.value;
+    if (customer == null) {
       setCustomerError("Select a contact");
       customerRef.current.focus();
       inputsAreValid = false;
     }
 
     if (inputsAreValid) {
-      // create a new interaction
+      dispatch(
+        dataActions.createInteraction(
+          {
+            interactionTypeId: type.id,
+            description: descriptionRef.current.value,
+          },
+          customer.type,
+          customer.id
+        )
+      );
 
       dispatch(uiActions.hideNewItemDialog());
     }
@@ -63,6 +69,7 @@ const NewInteractionForm = React.forwardRef((props, ref) => {
         onChange={customerChangeHandler}
         errorText={customerError}
         inputRef={customerRef}
+        ref={customerValueRef}
       />
       <InteractionTypeAutoComplete
         onChange={typeChangeHandler}

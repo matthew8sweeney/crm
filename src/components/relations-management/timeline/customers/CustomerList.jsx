@@ -13,7 +13,7 @@ const CustomerList = (props) => {
     <List component="nav">
       {Object.keys(props.data).map((customerKey) => (
         <CustomerLI
-          customerKey={customerKey}
+          customerId={customerKey}
           type={props.type}  // customer type (leads/accounts)
           selected={customerKey === pathSegments[3]}
           key={customerKey}
