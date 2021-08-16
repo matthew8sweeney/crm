@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "@material-ui/core";
 
-import { dataActions } from "../../../store/data-slice";
+import { dataActions, initialCustomerState } from "../../../store/data-slice";
 import { uiActions } from "../../../store/ui-slice";
 import ValidTextField from "../../ui/ValidTextField";
 import IndustrySelect from "../IndustrySelect";
@@ -11,13 +11,15 @@ const isValidName = (str) => str.length > 0;
 
 const EditAccountForm = React.forwardRef((props, ref) => {
   const dispatch = useDispatch();
+  const { accounts, industries } = useSelector((state) => state.data);
   const accountNameRef = useRef();
   const websiteRef = useRef();
   const addressRef = useRef();
   const [accountNameError, setAccountNameError] = useState("");
 
-  const account = useSelector((state) => state.data.accounts[props.id]);
-  const { industries } = useSelector((state) => state.data);
+  let account = initialCustomerState();
+  if (props.id) account = accounts[props.id];
+
   let initialIndustry = null;
   if (account.industryId in industries)
     initialIndustry = industries[account.industryId];
@@ -43,16 +45,17 @@ const EditAccountForm = React.forwardRef((props, ref) => {
     }
 
     if (inputsAreValid) {
+      let industryId = "";
+      if (industry != null) industryId = industry.id;
       // update existing account
-
-      // dispatch(
-      //   dataActions.createAccount({
-      //     name: accountNameRef.current.value,
-      //     website: websiteRef.current.value,
-      //     address: addressRef.current.value,
-      //     industryId,
-      //   })
-      // );
+      dispatch(
+        dataActions.editAccount(props.id, {
+          name: accountNameRef.current.value,
+          website: websiteRef.current.value,
+          address: addressRef.current.value,
+          industryId,
+        })
+      );
       dispatch(uiActions.hideEditItemDialog());
     }
   };
@@ -61,7 +64,8 @@ const EditAccountForm = React.forwardRef((props, ref) => {
     event.preventDefault();
 
     // delete this account from database and remove from state
-    console.log("account should be deleted");
+    dispatch(dataActions.deleteAccount(props.id));
+    dispatch(uiActions.hideEditItemDialog());
   };
 
   return (

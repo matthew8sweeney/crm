@@ -22,14 +22,15 @@ const initialState = { leads: {}, accounts: {} };
 //   },
 // };
 
-const initialCustomerState = {
+export const initialCustomerState = () => ({
   latestAction: "New",
   address: "",
   website: "",
+  industryId: "",
   interactions: {},
   tasks: {},
   notes: {},
-};
+});
 
 const initialInteractionState = {
   actionType: "Interaction",
@@ -57,30 +58,26 @@ const initialActionStates = {
 /**
  * Fill in empty/default values where backend has nothing
  */
-const normalizeCustomersState = (
-  customersState,
-  customerType,
-  actionsState
-) => {
+const normalizeCustomersState = (customersState, customerType, actions) => {
   for (const customerId in customersState) {
     customersState[customerId] = {
-      ...initialCustomerState,
+      ...initialCustomerState(),
       ...customersState[customerId],
     };
     const customerState = customersState[customerId];
     normalizeActionsState(
       customerState,
-      actionsState.interactions[customerType][customerId],
+      actions.interactions[customerType][customerId],
       "interactions"
     );
     normalizeActionsState(
       customerState,
-      actionsState.tasks[customerType][customerId],
+      actions.tasks[customerType][customerId],
       "tasks"
     );
     normalizeActionsState(
       customerState,
-      actionsState.notes[customerType][customerId],
+      actions.notes[customerType][customerId],
       "notes"
     );
   }
@@ -118,10 +115,11 @@ const dataSlice = createSlice({
       normalizeCustomersState(state.accounts, "accounts", actions);
       return state;
     },
+
     addCustomer(state, action) {
       const customers = state[action.payload.type]; // either leads or accounts
       const id = action.payload.id;
-      customers[id] = { ...initialCustomerState, ...action.payload.data };
+      customers[id] = { ...initialCustomerState(), ...action.payload.data };
     },
     addInteraction(state, action) {
       addAction(state, action.payload, "interactions");
@@ -131,6 +129,18 @@ const dataSlice = createSlice({
     },
     addNote(state, action) {
       addAction(state, action.payload, "notes");
+    },
+
+    removeCustomer(state, action) {
+      const pl = action.payload;
+      delete state[pl.type][pl.id];
+    },
+
+    updateCustomer(state, action) {
+      const pl = action.payload;
+      const customers = state[pl.type];
+      const customer = customers[pl.id];
+      customers[pl.id] = { ...customer, ...pl.data };
     },
   },
 });
@@ -149,7 +159,7 @@ const loadData = () => {
   };
 };
 
-const createCustomer = (customerData, customerType) => {
+const createCustomer = (customerType, customerData) => {
   return async (dispatch) => {
     const data = await manageJsonRequest({
       url: `${FIREBASE_URL}/${customerType}.json`,
@@ -157,7 +167,6 @@ const createCustomer = (customerData, customerType) => {
       body: customerData,
     });
 
-    // console.log(data);
     if (data instanceof Error) {
       // notify failure
     } else {
@@ -172,11 +181,65 @@ const createCustomer = (customerData, customerType) => {
   };
 };
 
-const createLead = (leadData) => createCustomer(leadData, "leads");
-const createAccount = (accountData) => createCustomer(accountData, "accounts");
+const createLead = (leadData) => createCustomer("leads", leadData);
+const createAccount = (accountData) => createCustomer("accounts", accountData);
+
+const editCustomer = (customerType, customerId, customerData) => {
+  return async (dispatch) => {
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${customerType}/${customerId}.json`,
+      method: "PATCH",
+      body: customerData,
+    });
+
+    if (data instanceof Error) {
+      // notify failure
+    } else {
+      dispatch(
+        dataActions.updateCustomer({
+          type: customerType,
+          id: customerId,
+          data: customerData,
+        })
+      );
+    }
+  };
+};
+
+const editLead = (id, data) => editCustomer("leads", id, data);
+const editAccount = (id, data) => editCustomer("accounts", id, data);
 
 const deleteCustomer = (customerType, customerId) => {
-  return async (dispatch) => {};
+  return async (dispatch) => {
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${customerType}/${customerId}.json`,
+      method: "DELETE",
+    });
+
+    if (data instanceof Error) {
+      // notify failure
+    } else {
+      dispatch(
+        dataActions.removeCustomer({
+          type: customerType,
+          id: customerId,
+        })
+      );
+      // also get rid of other relevant records from database
+      manageJsonRequest({
+        url: `${FIREBASE_URL}/interactions/${customerType}/${customerId}.json`,
+        method: "DELETE",
+      });
+      manageJsonRequest({
+        url: `${FIREBASE_URL}/tasks/${customerType}/${customerId}.json`,
+        method: "DELETE",
+      });
+      manageJsonRequest({
+        url: `${FIREBASE_URL}/notes/${customerType}/${customerId}.json`,
+        method: "DELETE",
+      });
+    }
+  };
 };
 
 const deleteLead = (id) => deleteCustomer("leads", id);
@@ -236,6 +299,8 @@ export const dataActions = {
   createNote,
   deleteLead,
   deleteAccount,
+  editLead,
+  editAccount,
 };
 
 export default dataSlice;

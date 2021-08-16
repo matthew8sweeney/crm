@@ -5,7 +5,6 @@ import { Container } from "@material-ui/core";
 
 import { authActions } from "./store/auth-slice";
 import { dataActions } from "./store/data-slice";
-import dummyData from "./store/dummy-data";
 import NewItemDialog from "./components/relations-management/new-item/NewItemDialog";
 import EditItemDialog from "./components/relations-management/edit-item/EditItemDialog";
 import LoginSignup from "./pages/LoginSignup";
@@ -30,7 +29,6 @@ function App() {
   useEffect(() => {
     // load data when user is authenticated
     if (loggedIn) {
-      // dispatch(dataActions.replaceData(dummyData));  // show dummy data by default
       dispatch(dataActions.loadData());
     }
   }, [dispatch, loggedIn]);

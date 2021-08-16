@@ -46,6 +46,7 @@ const uiSlice = createSlice({
     },
     hideEditItemDialog(state) {
       state.editItemDialog.isOpen = false;
+      state.editItemDialog.itemId = "";
     },
   },
 });
