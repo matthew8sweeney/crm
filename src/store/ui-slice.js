@@ -7,7 +7,12 @@ const initialState = {
   },
   newItemDialog: {
     isOpen: false,
-    itemTypeIndex: -1,
+    itemTypeIndex: -1, // 0-4 for different items (lead/account/note/etc)
+  },
+  editItemDialog: {
+    isOpen: false,
+    itemType: "", // type name ("leads"/"accounts"/"notes"/etc)
+    itemId: "",
   },
 };
 
@@ -34,6 +39,13 @@ const uiSlice = createSlice({
     },
     hideNewItemDialog(state) {
       state.newItemDialog.isOpen = false;
+    },
+
+    showEditItemDialog(state, action) {
+      state.editItemDialog = { isOpen: true, ...action.payload };
+    },
+    hideEditItemDialog(state) {
+      state.editItemDialog.isOpen = false;
     },
   },
 });

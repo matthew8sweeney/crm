@@ -1,3 +1,28 @@
-.link{
-    color: #00E;
+/* cell containing "edit" button */
+td.edit {
+    padding: 0px;
+}
+
+td.edit:last-child {
+    padding-right: 0px;
+}
+
+/* "edit" button itself */
+td.edit button {
+    border-radius: 0px;
+}
+
+/* data rows */
+tr.row {
+    display: flex;
+}
+
+/* table-data cells */
+tr.row td {
+    flex-grow: 1;
+}
+
+/* hyperlinks */
+.link {
+    color: #00e;
 }

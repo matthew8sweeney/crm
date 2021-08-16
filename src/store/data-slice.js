@@ -24,6 +24,8 @@ const initialState = { leads: {}, accounts: {} };
 
 const initialCustomerState = {
   latestAction: "New",
+  address: "",
+  website: "",
   interactions: {},
   tasks: {},
   notes: {},
@@ -46,32 +48,56 @@ const initialNoteState = {
   text: "",
 };
 
+const initialActionStates = {
+  interactions: initialInteractionState,
+  tasks: initialTaskState,
+  notes: initialNoteState,
+};
+
 /**
  * Fill in empty/default values where backend has nothing
  */
-const normalizeCustomersState = (customersState) => {
+const normalizeCustomersState = (
+  customersState,
+  customerType,
+  actionsState
+) => {
   for (const customerId in customersState) {
     customersState[customerId] = {
       ...initialCustomerState,
       ...customersState[customerId],
     };
     const customerState = customersState[customerId];
-    normalizeActionsState(customerState.interactions, initialInteractionState);
-    normalizeActionsState(customerState.tasks, initialTaskState);
-    normalizeActionsState(customerState.notes, initialNoteState);
+    normalizeActionsState(
+      customerState,
+      actionsState.interactions[customerType][customerId],
+      "interactions"
+    );
+    normalizeActionsState(
+      customerState,
+      actionsState.tasks[customerType][customerId],
+      "tasks"
+    );
+    normalizeActionsState(
+      customerState,
+      actionsState.notes[customerType][customerId],
+      "notes"
+    );
   }
 };
 
-const normalizeActionsState = (actionsState, initialActionState) => {
+const normalizeActionsState = (customerState, actionsState, actionType) => {
+  const initialActionState = initialActionStates[actionType];
   for (const actionId in actionsState) {
-    actionsState[actionId] = {
+    customerState[actionType][actionId] = {
       ...initialActionState,
       ...actionsState[actionId],
     };
   }
 };
 
-const addAction = (state, payload, actionType, initialActionState) => {
+const addAction = (state, payload, actionType) => {
+  const initialActionState = initialActionStates[actionType];
   const customer = state[payload.customerType][payload.customerId];
   customer[actionType][payload.actionId] = {
     ...initialActionState,
@@ -84,9 +110,12 @@ const dataSlice = createSlice({
   initialState,
   reducers: {
     replaceData(state, action) {
-      state = { ...initialState, ...action.payload };
-      normalizeCustomersState(state.leads);
-      normalizeCustomersState(state.accounts);
+      const { interactions, tasks, notes, ...rest } = action.payload;
+      state = { ...initialState, ...rest };
+
+      const actions = { interactions, tasks, notes };
+      normalizeCustomersState(state.leads, "leads", actions);
+      normalizeCustomersState(state.accounts, "accounts", actions);
       return state;
     },
     addCustomer(state, action) {
@@ -95,13 +124,13 @@ const dataSlice = createSlice({
       customers[id] = { ...initialCustomerState, ...action.payload.data };
     },
     addInteraction(state, action) {
-      addAction(state, action.payload, "interactions", initialInteractionState);
+      addAction(state, action.payload, "interactions");
     },
     addTask(state, action) {
-      addAction(state, action.payload, "tasks", initialTaskState);
+      addAction(state, action.payload, "tasks");
     },
     addNote(state, action) {
-      addAction(state, action.payload, "notes", initialNoteState);
+      addAction(state, action.payload, "notes");
     },
   },
 });
@@ -146,6 +175,13 @@ const createCustomer = (customerData, customerType) => {
 const createLead = (leadData) => createCustomer(leadData, "leads");
 const createAccount = (accountData) => createCustomer(accountData, "accounts");
 
+const deleteCustomer = (customerType, customerId) => {
+  return async (dispatch) => {};
+};
+
+const deleteLead = (id) => deleteCustomer("leads", id);
+const deleteAccount = (id) => deleteCustomer("accounts", id);
+
 const createAction = (
   actionData,
   customerType,
@@ -155,7 +191,7 @@ const createAction = (
 ) => {
   return async (dispatch) => {
     const data = await manageJsonRequest({
-      url: `${FIREBASE_URL}/${customerType}/${customerId}/${actionType}.json`,
+      url: `${FIREBASE_URL}/${actionType}/${customerType}/${customerId}.json`,
       method: "POST",
       body: actionData,
     });
@@ -198,6 +234,8 @@ export const dataActions = {
   createInteraction,
   createTask,
   createNote,
+  deleteLead,
+  deleteAccount,
 };
 
 export default dataSlice;

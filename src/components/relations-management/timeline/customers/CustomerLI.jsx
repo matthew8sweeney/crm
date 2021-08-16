@@ -1,6 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  Button,
   IconButton,
   Table,
   TableBody,
@@ -9,6 +10,7 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 
+import { uiActions } from "../../../../store/ui-slice";
 import SelectPanelLI from "../../../ui/select-panel/SelectPanelLI";
 import classes from "./CustomerLI.module.css";
 
@@ -32,7 +34,7 @@ const MaybeLink = (props) => {
 };
 
 const InfoRow = (props) => (
-  <TableRow>
+  <TableRow className={classes.row}>
     <TableCell component="th" scope="row">
       {props.name}
     </TableCell>
@@ -48,6 +50,7 @@ const InfoRow = (props) => (
 );
 
 const CustomerLI = (props) => {
+  const dispatch = useDispatch();
   const customer = useSelector(
     (state) => state.data[props.type][props.customerId]
   );
@@ -61,6 +64,15 @@ const CustomerLI = (props) => {
     websiteUrl = websiteUrl.replace(/^(http:\/\/)|(https:\/\/)|/, "https://");
   }
 
+  const editHandler = (event) => {
+    dispatch(
+      uiActions.showEditItemDialog({
+        itemType: props.type,
+        itemId: props.customerId,
+      })
+    );
+  };
+
   return (
     <SelectPanelLI
       to={`/timeline/${props.type}/${props.customerId}`}
@@ -70,6 +82,14 @@ const CustomerLI = (props) => {
     >
       <Table size="small">
         <TableBody>
+          <TableRow>
+            <TableCell align="center" className={classes.edit}>
+              <Button onClick={editHandler} startIcon={<EditIcon />} fullWidth>
+                Edit
+              </Button>
+            </TableCell>
+          </TableRow>
+
           <InfoRow name="Website" value={customer.website} href={websiteUrl} />
           <InfoRow
             name="Address"
@@ -77,7 +97,6 @@ const CustomerLI = (props) => {
             href={MAP_SEARCH_URL + customer.address}
           />
           <InfoRow name="Industry" value={industryName} />
-          {/* <InfoRow name="Owner" value={data.owner}  /> */}
         </TableBody>
       </Table>
     </SelectPanelLI>

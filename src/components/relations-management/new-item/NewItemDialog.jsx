@@ -36,39 +36,39 @@ const newItemForms = [
 
 const newItemNames = ["Lead", "Account", "Interaction", "Task", "Note"];
 
-const NewItemsMenu = (props) => {
-  const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const isOpen = !!anchorEl;
+// const NewItemsMenu = (props) => {
+//   const dispatch = useDispatch();
+//   const [anchorEl, setAnchorEl] = useState(null);
+//   const isOpen = !!anchorEl;
 
-  const openHandler = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+//   const openHandler = (event) => {
+//     setAnchorEl(event.currentTarget);
+//   };
 
-  const closeHandler = (event, index) => {
-    if (typeof index !== "undefined") {
-      dispatch(uiActions.showNewItemDialog(index));
-    }
-    setAnchorEl(null);
-  };
+//   const closeHandler = (event, index) => {
+//     if (typeof index !== "undefined") {
+//       dispatch(uiActions.showNewItemDialog(index));
+//     }
+//     setAnchorEl(null);
+//   };
 
-  return (
-    <>
-      <List>
-        <ListItem button onClick={openHandler}>
-          <ListItemText primary={props.currentItem} />
-        </ListItem>
-      </List>
-      <Menu open={isOpen} anchorEl={anchorEl} onClose={closeHandler}>
-        {newItemNames.map((name, i) => (
-          <MenuItem onClick={(e) => closeHandler(e, i)} key={i}>
-            {name}
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <List>
+//         <ListItem button onClick={openHandler}>
+//           <ListItemText primary={props.currentItem} />
+//         </ListItem>
+//       </List>
+//       <Menu open={isOpen} anchorEl={anchorEl} onClose={closeHandler}>
+//         {newItemNames.map((name, i) => (
+//           <MenuItem onClick={(e) => closeHandler(e, i)} key={i}>
+//             {name}
+//           </MenuItem>
+//         ))}
+//       </Menu>
+//     </>
+//   );
+// };
 
 const NewItemDialog = (props) => {
   const dispatch = useDispatch();

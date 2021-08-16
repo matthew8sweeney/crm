@@ -7,6 +7,7 @@ import { authActions } from "./store/auth-slice";
 import { dataActions } from "./store/data-slice";
 import dummyData from "./store/dummy-data";
 import NewItemDialog from "./components/relations-management/new-item/NewItemDialog";
+import EditItemDialog from "./components/relations-management/edit-item/EditItemDialog";
 import LoginSignup from "./pages/LoginSignup";
 import MainNavigation from "./components/ui/main-navigation/MainNavigation";
 import PageNotFound from "./pages/PageNotFound";
@@ -38,6 +39,7 @@ function App() {
     <div className="app">
       {loggedIn && <MainNavigation />}
       <NewItemDialog />
+      <EditItemDialog />
       <Container
         className="app-container"
         style={loggedIn ? { marginLeft: "56px" } : {}}
