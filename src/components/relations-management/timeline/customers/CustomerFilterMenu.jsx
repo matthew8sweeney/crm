@@ -28,7 +28,7 @@ const CustomerFilterMenu = (props) => {
     }
   }, [industries]);
 
-  // debounce changes to url
+  // debounce changes to query params
   useEffect(() => {
     const timer = setTimeout(() => {
       const params = new URLSearchParams(search);

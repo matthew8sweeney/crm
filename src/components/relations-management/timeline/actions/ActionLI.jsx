@@ -1,41 +1,36 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { IconButton, ListItemSecondaryAction } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+
+import { uiActions } from "../../../../store/ui-slice";
 import SelectPanelLI from "../../../ui/select-panel/SelectPanelLI";
 
 const ActionLI = (props) => {
-  const interactionTypes = useSelector((state) => state.data.interactionTypes);
+  const dispatch = useDispatch();
 
-  const data = props.data;
-  const actionTypeNote = data.actionType + ": ";
-  let primaryText = "";
-  let secondaryText = "";
-  switch (data.actionType) {
-    case "Interaction":
-      primaryText = "Interaction";
-      const typeId = data.interactionTypeId;
-      if (typeId in interactionTypes)
-        primaryText = interactionTypes[typeId].name;
-      secondaryText = data.description;
-      break;
-    case "Task":
-      primaryText = actionTypeNote + data.title;
-      secondaryText = data.description;
-      break;
-    case "Note":
-      primaryText = actionTypeNote + data.title;
-      secondaryText = data.text;
-      break;
-    default:
-      console.log("data:");
-      console.log(data);
-  }
+  const editHandler = (event) => {
+    dispatch(
+      uiActions.showEditItemDialog({
+        itemType: props.data.actionType,
+        itemId: props.data.id,
+      })
+    );
+  };
 
   return (
     <SelectPanelLI
-      component={props.component}
-      primary={primaryText}
-      secondary={secondaryText}
-    ></SelectPanelLI>
+      {...props}
+      extraSecondaryAction={
+        <ListItemSecondaryAction>
+          <IconButton onClick={editHandler} label="edit">
+            <EditIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      }
+    >
+      {props.children}
+    </SelectPanelLI>
   );
 };
 

@@ -19,6 +19,7 @@ const InteractionTypeAutoComplete = (props) => {
   //TODO choose from types or specify own custom type
   return (
     <Autocomplete
+    value={props.value}
       options={optionsArray}
       getOptionLabel={(option) => option.name}
       getOptionSelected={autocompleteOptionObjectCompare}

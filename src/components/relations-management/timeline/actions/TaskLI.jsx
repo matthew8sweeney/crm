@@ -1,13 +1,14 @@
 import React from "react";
-import SelectPanelLI from "../../../ui/select-panel/SelectPanelLI";
+import ActionLI from "./ActionLI";
 
 const TaskLI = (props) => {
   return (
-    <SelectPanelLI
+    <ActionLI
       component={props.component}
       primary={props.data.title}
       secondary={props.data.description}
-    ></SelectPanelLI>
+      data={props.data}
+    />
   );
 };
 

@@ -35,6 +35,7 @@ const SelectPanelLI = (props) => {
         className={classes.item}
       >
         <ListItemText primary={props.primary} secondary={props.secondary} />
+        {props.extraSecondaryAction}
         {expandable && (
           <ListItemSecondaryAction>
             <IconButton

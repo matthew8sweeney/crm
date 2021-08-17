@@ -76,7 +76,7 @@ const NewInteractionForm = React.forwardRef((props, ref) => {
         errorText={typeError}
         inputRef={typeRef}
       />
-      {/* TODO more flexible form structure based on interaction type */}
+      {/* TODO more flexible form structure based on interaction type? */}
       <TextField
         label="Interaction Description"
         inputRef={descriptionRef}

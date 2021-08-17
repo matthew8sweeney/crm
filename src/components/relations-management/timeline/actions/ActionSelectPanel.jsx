@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import SelectPanel from "../../../ui/select-panel/SelectPanel";
 import ActionFilterMenu from "./ActionFilterMenu";
 import ActionList from "./ActionList";
-import ActionLI from "./ActionLI";
+import AllActionsLI from "./AllActionsLI";
 import InteractionLI from "./InteractionLI";
 import TaskLI from "./TaskLI";
 import NoteLI from "./NoteLI";
@@ -90,7 +90,7 @@ const ActionSelectPanel = (props) => {
       tabs={["All", "Interactions", "Tasks", "Notes"]}
       activeTab={tab}
       bodies={[
-        <ActionList component={ActionLI} data={allData} />,
+        <ActionList component={AllActionsLI} data={allData} />,
         <ActionList component={InteractionLI} data={interactionData} />,
         <ActionList component={TaskLI} data={taskData} />,
         <ActionList component={NoteLI} data={noteData} />,

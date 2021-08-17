@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import SelectPanelLI from "../../../ui/select-panel/SelectPanelLI";
+import ActionLI from "./ActionLI";
 
 const InteractionLI = (props) => {
   const interactionTypes = useSelector((state) => state.data.interactionTypes);
@@ -9,11 +9,12 @@ const InteractionLI = (props) => {
   if(typeId in interactionTypes) typeName = interactionTypes[typeId].name 
 
   return (
-    <SelectPanelLI
+    <ActionLI
       component={props.component}
       primary={typeName}
       secondary={props.data.description}
-    ></SelectPanelLI>
+      data={props.data}
+    />
   );
 };
 

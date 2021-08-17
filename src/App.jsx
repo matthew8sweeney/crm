@@ -44,16 +44,16 @@ function App() {
       >
         <Switch>
           <Route exact path="/">
-            {loggedIn && <Redirect to="/dashboard" />}
+            {loggedIn && <Redirect to="/timeline" />}
             <p>This shall be a resplendant CRM system someday</p>
             <NavLink to="/login">Login or Sign Up</NavLink>
           </Route>
           <Route path="/login">
-            {loggedIn && <Redirect to="/dashboard" />}
+            {loggedIn && <Redirect to="/timeline" />}
             <LoginSignup login linkTo="/signup" />
           </Route>
           <Route path="/signup">
-            {loggedIn && <Redirect to="/dashboard" />}
+            {loggedIn && <Redirect to="/timeline" />}
             <LoginSignup signup linkTo="/login" />
           </Route>
           {!loggedIn && authChecked && <Redirect to="/" />}

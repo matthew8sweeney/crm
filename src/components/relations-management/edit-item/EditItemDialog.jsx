@@ -13,45 +13,32 @@ import DeleteIcon from "@material-ui/icons/DeleteForever";
 import { uiActions } from "../../../store/ui-slice";
 import EditLeadForm from "./EditLeadForm";
 import EditAccountForm from "./EditAccountForm";
-// import EditInteractionForm from "./EditInteractionForm";
-// import EditTaskForm from "./EditTaskForm";
-// import EditNoteForm from "./EditNoteForm";
+import EditInteractionForm from "./EditInteractionForm";
+import EditTaskForm from "./EditTaskForm";
+import EditNoteForm from "./EditNoteForm";
 import classes from "./EditItemDialog.module.css";
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide ref={ref} direction="up" unmountOnExit {...props} />
 ));
 
-const editItemForms = [
-  EditLeadForm,
-  EditAccountForm,
-  // EditInteractionForm,
-  // EditTaskForm,
-  // EditNoteForm,
-];
-
-const itemTypeIndices = {
-  leads: 0,
-  accounts: 1,
-  interactions: 2,
-  tasks: 3,
-  notes: 4,
+const itemTypeInfo = {
+  leads: { itemName: "Lead", EditItemForm: EditLeadForm },
+  accounts: { itemName: "Account", EditItemForm: EditAccountForm },
+  interactions: { itemName: "Interaction", EditItemForm: EditInteractionForm },
+  tasks: { itemName: "Task", EditItemForm: EditTaskForm },
+  notes: { itemName: "Note", EditItemForm: EditNoteForm },
+  "": { itemName: "", EditItemForm: "" },
 };
-
-const itemNames = ["Lead", "Account", "Interaction", "Task", "Note"];
 
 const EditItemDialog = (props) => {
   const dispatch = useDispatch();
   const { isOpen, itemType, itemId } = useSelector(
     (state) => state.ui.editItemDialog
   );
-  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
-
-  const itemTypeIndex = itemTypeIndices[itemType];
-  const itemName = itemNames[itemTypeIndex];
-  const EditItemForm = editItemForms[itemTypeIndex];
   const formRef = useRef();
   const deleteRef = useRef();
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
   const deleteAlertHandler = (event) => {
     setDeleteAlertOpen(true);
@@ -75,6 +62,7 @@ const EditItemDialog = (props) => {
     formRef.current.requestSubmit();
   };
 
+  const { itemName, EditItemForm } = itemTypeInfo[itemType];
   return (
     <Dialog
       open={isOpen}
@@ -111,7 +99,11 @@ const EditItemDialog = (props) => {
             >
               Cancel
             </Button>
-            <Button onClick={deleteHandler} variant="contained" color="secondary">
+            <Button
+              onClick={deleteHandler}
+              variant="contained"
+              color="secondary"
+            >
               Delete
             </Button>
           </DialogActions>

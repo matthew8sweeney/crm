@@ -32,19 +32,19 @@ export const initialCustomerState = () => ({
   notes: {},
 });
 
-const initialInteractionState = {
-  actionType: "Interaction",
+export const initialInteractionState = {
+  actionType: "interactions",
   interactionTypeId: "",
 };
 
-const initialTaskState = {
-  actionType: "Task",
+export const initialTaskState = {
+  actionType: "tasks",
   title: "",
   description: "",
 };
 
-const initialNoteState = {
-  actionType: "Note",
+export const initialNoteState = {
+  actionType: "notes",
   title: "",
   text: "",
 };
@@ -135,12 +135,39 @@ const dataSlice = createSlice({
       const pl = action.payload;
       delete state[pl.type][pl.id];
     },
+    removeInteraction(state, action) {
+      const pl = action.payload;
+      delete state[pl.customerType][pl.customerId].interactions[pl.actionId];
+    },
+    removeTask(state, action) {
+      const pl = action.payload;
+      delete state[pl.customerType][pl.customerId].tasks[pl.actionId];
+    },
+    removeNote(state, action) {
+      const pl = action.payload;
+      delete state[pl.customerType][pl.customerId].notes[pl.actionId];
+    },
 
     updateCustomer(state, action) {
       const pl = action.payload;
       const customers = state[pl.type];
       const customer = customers[pl.id];
       customers[pl.id] = { ...customer, ...pl.data };
+    },
+    updateInteraction(state, action) {
+      const pl = action.payload;
+      const { interactions } = state[pl.customerType][pl.customerId];
+      interactions[pl.actionId] = { ...interactions[pl.actionId], ...pl.data };
+    },
+    updateTask(state, action) {
+      const pl = action.payload;
+      const { tasks } = state[pl.customerType][pl.customerId];
+      tasks[pl.actionId] = { ...tasks[pl.actionId], ...pl.data };
+    },
+    updateNote(state, action) {
+      const pl = action.payload;
+      const { notes } = state[pl.customerType][pl.customerId];
+      notes[pl.actionId] = { ...notes[pl.actionId], ...pl.data };
     },
   },
 });
@@ -289,6 +316,120 @@ const createTask = (data, customerType, customerId) =>
 const createNote = (data, customerType, customerId) =>
   createAction(data, customerType, customerId, "notes", dataActions.addNote);
 
+const editAction = (
+  customerType,
+  customerId,
+  actionType,
+  actionId,
+  actionData,
+  reducer
+) => {
+  return async (dispatch) => {
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${actionType}/${customerType}/${customerId}/${actionId}.json`,
+      method: "PATCH",
+      body: actionData,
+    });
+
+    if (data instanceof Error) {
+      // notify failure
+    } else {
+      dispatch(
+        reducer({
+          customerType,
+          customerId,
+          actionId,
+          data: actionData,
+        })
+      );
+    }
+  };
+};
+
+const editInteraction = (customerType, customerId, actionId, data) =>
+  editAction(
+    customerType,
+    customerId,
+    "interactions",
+    actionId,
+    data,
+    dataActions.updateInteraction
+  );
+
+const editTask = (customerType, customerId, actionId, data) =>
+  editAction(
+    customerType,
+    customerId,
+    "tasks",
+    actionId,
+    data,
+    dataActions.updateTask
+  );
+
+const editNote = (customerType, customerId, actionId, data) =>
+  editAction(
+    customerType,
+    customerId,
+    "notes",
+    actionId,
+    data,
+    dataActions.updateNote
+  );
+
+const deleteAction = (
+  customerType,
+  customerId,
+  actionType,
+  actionId,
+  reducer
+) => {
+  return async (dispatch) => {
+    const data = await manageJsonRequest({
+      url: `${FIREBASE_URL}/${actionType}/${customerType}/${customerId}/${actionId}.json`,
+      method: "DELETE",
+    });
+
+    if (data instanceof Error) {
+      // notify failure
+    } else {
+      dispatch(
+        reducer({
+          customerType,
+          customerId,
+          actionId,
+        })
+      );
+    }
+  };
+};
+
+const deleteInteraction = (customerType, customerId, actionId) =>
+  deleteAction(
+    customerType,
+    customerId,
+    "interactions",
+    actionId,
+    dataActions.removeInteraction
+  );
+
+const deleteTask = (customerType, customerId, actionId) =>
+  deleteAction(
+    customerType,
+    customerId,
+    "tasks",
+    actionId,
+    dataActions.removeTask
+  );
+
+const deleteNote = (customerType, customerId, actionId) =>
+  deleteAction(
+    customerType,
+    customerId,
+    "notes",
+    actionId,
+    dataActions.removeNote
+  );
+
 export const dataActions = {
   ...dataSlice.actions,
   loadData,
@@ -299,8 +440,14 @@ export const dataActions = {
   createNote,
   deleteLead,
   deleteAccount,
+  deleteInteraction,
+  deleteTask,
+  deleteNote,
   editLead,
   editAccount,
+  editInteraction,
+  editTask,
+  editNote,
 };
 
 export default dataSlice;

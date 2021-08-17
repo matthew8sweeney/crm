@@ -13,7 +13,7 @@ const ActionFilterMenu = (props) => {
     if (params.has("actionSearch")) setSearchStr(params.get("actionSearch"));
   }, []);
 
-  // debounce changes to url
+  // debounce changes to query param(s)
   useEffect(() => {
     const timer = setTimeout(() => {
       const params = new URLSearchParams(search);
